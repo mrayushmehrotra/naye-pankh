@@ -8,18 +8,40 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  email     String    @unique
-  firstName String
-  lastName  String?
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  email           String   @unique
+  firstName       String
+  lastName        String?
   profileImageURL String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  campaigns    Campaign[] // User can create multiple campaigns
+  transactions Transaction[] // User can have multiple transactions
+}
+
+model Campaign {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @db.ObjectId
+  title        String
+  description  String
+  goalAmount   Float
+  raisedAmount Float    @default(0)
+  imageUrl     String?
+  category     String
+  createdAt    DateTime @default(now())
+
+  user         User          @relation(fields: [userId], references: [id])
+  transactions Transaction[] // A campaign can have multiple transactions
 }
 
 model Transaction {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String
-  amount    Float
-  createdAt DateTime @default(now())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  campaignId String   @db.ObjectId
+  amount     Float
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id])
+  campaign Campaign @relation(fields: [campaignId], references: [id])
 }

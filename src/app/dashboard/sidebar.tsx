@@ -25,7 +25,7 @@ const Sidebar = () => {
     },
     {
       name: "Start Here",
-      path: "/dashboard/start",
+      path: "/dashboard/campaign",
       icon: <Rocket size={20} />,
     },
     { name: "FAQ", path: "/dashboard/faq", icon: <HelpCircle size={20} /> },
